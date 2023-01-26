@@ -1,4 +1,4 @@
-# GPipe
+# <p align="center"> GPipe </p>
 <p align="center">
   <img src="https://github.com/frankuman/GPipe/blob/main/logo1.png" width="350" title="GPipe Logo">
   
