@@ -1,4 +1,0 @@
-25/01
-Added first edition of project plan and requirement list
-26/01
-Added main file with API request, currently can fetch a JSON type string

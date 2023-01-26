@@ -1,0 +1,9 @@
+25/01
++Added first edition of project plan and requirement list
+26/01
++Added main file
++Added REST Api to communicate with host
++Added a time setter, so you can send start and end time for search
++Added a platform picker, so you can choose
++Added a menu
++Added more spaghetti code
