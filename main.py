@@ -11,8 +11,7 @@ WELCOME ="""
                     A Gerrit Analysis Pipeline
                     Made by Oliver Bölin                                                                      """
 
-
-
+#imports
 import pip._vendor.requests as requests
 import json
 from requests.auth import HTTPBasicAuth
@@ -39,8 +38,11 @@ android = "https://android-review.googlesource.com"
 opendev = "https://review.opendev.org"
 chromium = "https://chromium-review.googlesource.com"
 
-#Globals
 
+
+#I do not know if there is a better way to deal with settings, 
+# maybe loading and saving them in every function is not so great after all ┬─┬ノ( º _ ºノ)
+#------------------------Settings--------------------------------------------
 def write_settings(settings):
     file_name = "settings.json"
     print(settings)
@@ -68,6 +70,10 @@ Platform: {platform}
 Time:  {date_2} {time_2} -> {date_1} {time_1}
     """
     return(current_settings)
+#--------------------------------------------------------------------------
+
+#------------------------API & JSON----------------------------------------
+
 def requestAPICall(url):
     """
     does API stuff
@@ -100,13 +106,14 @@ def generateLink(PLATFORM,date1 = current_date,date2=current_date,time1=time_1,t
     Generates a link that is used by the REST api, format is weird hopefully it doesn't break when
     more stuff is added
     """
-
      #The format is: since:"2023-01-26 21:18:00 +0100" before:"2023-01-26 21:18:30 +0100"
     since = f"%22{date2}%20{time2}%20%2B{UTC}%22" #This took a long while to figure out, but thanks to 
     before = f"%22{date1}%20{time1}%20%2B{UTC}%22"#this stackoverflow person https://stackoverflow.com/questions/53589423/gerrit-rest-api-not-working-when-query-string-contains-hour-minute-second
     getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}"
     return getLINK
+#--------------------------------------------------------------------------
 
+#------------------------Changing Settings---------------------------------
 def set_Time(): #WIP
     """
     Sets the timeframe, i.e 2022-12-22 06:00:00 -> 2022-12-22 06:15:00
@@ -115,12 +122,12 @@ def set_Time(): #WIP
     date_1 = str(input("Select a START date [FORMAT:2022-12-22]:"))
     date_2 = str(input("Select a END date [FORMAT:2022-12-22]:"))
     time_1 = str(input("Select a START time in the format of [FORMAT:23:39:00]:"))
-    time_1 = str(input("Select a END time in the format of [FORMAT:23:39:00]"))
+    time_2 = str(input("Select a END time in the format of [FORMAT:23:39:00]"))
     UTC2 = str(input("Select a END time in the format of [0100]:"))
-    settings["DATE_2"] = date_1
     settings["DATE_1"] = date_2
-    settings["SET_TIME_2"] = time_1
+    settings["DATE_2"] = date_1
     settings["SET_TIME_1"] = time_2
+    settings["SET_TIME_2"] = time_1
     settings["UTC"] = UTC2
     write_settings(settings)
     menu()
@@ -149,7 +156,7 @@ def set_Platform():
     else:
         print("Option not found in menu, try again!")
         set_Platform()
-    
+#--------------------------------------------------------------------------    
 def run_GPipe():
     settings_dict = load_settings()
     PLATFORM = settings_dict["PLATFORM"]
@@ -187,7 +194,7 @@ def menu():
         menu()
 
 def main():
-    #Dict with settings, and all in strings
+    #Dict with settings, and all in strings (╯°□°)╯︵ ┻━┻
     settings_dict = {"PLATFORM": chromium, "DATE_1": current_date.strftime("%Y-%m-%d"), "DATE_2": current_date.strftime("%Y-%m-%d"), "SET_TIME_1": time_1, "SET_TIME_2":time_2,"UTC":"0100"}
     write_settings(settings_dict)
     print(WELCOME)

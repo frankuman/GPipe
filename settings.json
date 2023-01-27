@@ -1,8 +1,8 @@
 {
-    "PLATFORM": "https://review.opendev.org",
-    "DATE_1": "2023-01-27",
-    "DATE_2": "2023-01-27",
-    "SET_TIME_1": "15:08:39",
-    "SET_TIME_2": "15:03:39",
+    "PLATFORM": "https://chromium-review.googlesource.com",
+    "DATE_1": "2023-01-26",
+    "DATE_2": "2023-01-26",
+    "SET_TIME_1": "13:10:00",
+    "SET_TIME_2": "13:00:00",
     "UTC": "0100"
 }
