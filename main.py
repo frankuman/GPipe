@@ -92,7 +92,7 @@ def generateLink(PLATFORM,date1 = current_date,date2=current_date,time1=time_1,t
      #The format is: since:"2023-01-26 21:18:00 +0100" before:"2023-01-26 21:18:30 +0100"
     since = f"%22{date2}%20{time2}%20%2B{utc}%22" #This took a long while to figure out, but thanks to 
     before = f"%22{date1}%20{time1}%20%2B{utc}%22"#this stackoverflow person https://stackoverflow.com/questions/53589423/gerrit-rest-api-not-working-when-query-string-contains-hour-minute-second
-    getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}"
+    getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}&n=2"
     return getLINK
 
 def set_Time(): #WIP
