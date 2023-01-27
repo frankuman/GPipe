@@ -1,4 +1,4 @@
-#  <img src="https://github.com/frankuman/GPipe/blob/main/docs/intropic.png" width="350" title="GPipe Logo">
+#  <img src="https://github.com/frankuman/GPipe/blob/main/docs/intropic.png" width="700" title="GPipe Logo">
   
 </p>
 <p align="center">
