@@ -1,4 +1,4 @@
-#  <img src="https://github.com/frankuman/GPipe/blob/main/docs/intropic.png" width="600" title="GPipe Logo">
+#  <p align="left"> <img src="https://github.com/frankuman/GPipe/blob/main/docs/intropic.png" width="500" title="GPipe Logo"> </p>
 
 <p align="center"> 
 GPipe is a work in progress school project</p><p align="center"> 
