@@ -10,5 +10,5 @@ software so you don’t have to go into the terminal and write weird scripts. So
 is a key feature that should be implemented.
  </p>
 
-
+#  <p align="left"> <img src="#   <img src="https://github.com/frankuman/GPipe/blob/main/docs/intropic.png" </p>
 
