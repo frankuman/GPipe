@@ -7,3 +7,8 @@
 +Added a platform picker, so you can choose
 +Added a menu
 +Added more spaghetti code
+30/01
++Added a GUI for the main menu with radiobuttons and run/quit
++This is spaghetti deluxe. but, it looks beautiful
+31/01
++Added a textbox with a working df-print that shows all changes
