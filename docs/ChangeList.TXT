@@ -7,8 +7,3 @@
 +Added a platform picker, so you can choose
 +Added a menu
 +Added more spaghetti code
-27/01
--Removed spaghetti globals
-+Added settings file so it looks cleaner
-+Fixed some more spaghetti
-
