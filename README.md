@@ -10,10 +10,5 @@ software so you don’t have to go into the terminal and write weird scripts. So
 is a key feature that should be implemented.
  </p>
 
-</p>
-<p align="center">
-  <img src="https://github.com/frankuman/GPipe/blob/main/logo1.png" width="350" title="GPipe Logo">
-  
-</p>
-
+<p align="center"> <img src="https://i.gyazo.com/900a768df7790faf80fe960b8b2a1fb6.png" width="1000" title="Current UI"></p>
 
