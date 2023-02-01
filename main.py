@@ -227,8 +227,8 @@ class App(customtkinter.CTk):
        
         root.radiobutton_frame.grid(row=0, column=4, padx=(20, 20), pady=(20, 0), sticky="nsew")
         root.radio_var = IntVar(value=0)
-        root.label_radio_group = customtkinter.CTkLabel(master=root.radiobutton_frame, text="Platform")
-        root.label_radio_group.grid(row=0, column=4, columnspan=1, padx=10, pady=10, sticky="")
+        root.label_radio_group = customtkinter.CTkLabel(master=root.radiobutton_frame, text="/ Platform")
+        root.label_radio_group.grid(row=0, column=4, columnspan=1, padx=10, pady=(5, 5), sticky="")
         root.radio_button_1 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var, value=0, text="Chromium")
         root.radio_button_1.grid(row=1, column=4, pady=10, padx=20, sticky="n")
         root.radio_button_2 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var, value=1, text="OpenDEV")
@@ -236,11 +236,13 @@ class App(customtkinter.CTk):
         root.radio_button_3 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var, value=2, text="Android")
         root.radio_button_3.grid(row=3, column=4, pady=10, padx=20, sticky="n")
         #More radio buttons, doesnt do anything rn
+        
         root.radio_var_2 = IntVar(value=0)
+
         root.label_radio_group_2 = customtkinter.CTkLabel(master=root.radiobutton_frame, text="Chungite?")
         root.label_radio_group_2.grid(row=4, column=4, columnspan=1, padx=10, pady=10, sticky="")
         root.radio_button_4 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var_2, value=0, text="Yes")
-        root.radio_button_4.grid(row=5, column=4, pady=20, padx=20, sticky="n")
+        root.radio_button_4.grid(row=5, column=4, pady=10, padx=20, sticky="n")
         root.radio_button_5 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var_2, value=1, text="Tomorrow")
         root.radio_button_5.grid(row=6, column=4, pady=10, padx=20, sticky="n")
         root.radio_button_6 = customtkinter.CTkRadioButton(master=root.radiobutton_frame, variable=root.radio_var_2, value=2, text="Ooga")
@@ -254,17 +256,27 @@ class App(customtkinter.CTk):
         
 
         #check - WIP
+   
         root.checkbox_slider_frame = customtkinter.CTkFrame(root)
         root.checkbox_slider_frame.grid(row=1, column=4, padx=(20, 20), pady=(20, 0), sticky="nsew")
-        root.checkbox_1 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame)
-        root.checkbox_1.grid(row=1, column=0, pady=(20, 10), padx=20, sticky="n")
-        root.checkbox_2 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame)
-        root.checkbox_2.grid(row=2, column=0, pady=10, padx=20, sticky="n")
-        root.switch_1 = customtkinter.CTkSwitch(master=root.checkbox_slider_frame, command=lambda: print("switch 1 toggle"))
-        root.switch_1.grid(row=3, column=0, pady=10, padx=20, sticky="n")
-        root.switch_2 = customtkinter.CTkSwitch(master=root.checkbox_slider_frame)
-        root.switch_2.grid(row=4, column=0, pady=(10, 20), padx=20, sticky="n")
 
+        root.checkbox_slider_group_2 = customtkinter.CTkLabel(master=root.checkbox_slider_frame, text="/ is:",anchor="n")
+        root.checkbox_slider_group_2.grid(row=0, column=0, padx=5, pady=5, sticky="")
+
+        root.checkbox_1 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="open")
+        root.checkbox_1.grid(row=1, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_2 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="watched")
+        root.checkbox_2.grid(row=2, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_3 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="unassigned")
+        root.checkbox_3.grid(row=3, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_4 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="reviewed")
+        root.checkbox_4.grid(row=4, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_4 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="closed")
+        root.checkbox_4.grid(row=5, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_4 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="merged")
+        root.checkbox_4.grid(row=6, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_4 = customtkinter.CTkCheckBox(master=root.checkbox_slider_frame,text="pending")
+        root.checkbox_4.grid(row=7, column=0, pady=(5, 5), padx=20, sticky="n")
         # create textbox
         root.textbox = customtkinter.CTkTextbox(root, width=1100,corner_radius=8,fg_color="transparent", border_width=2,)
         #root.bg_image_label.lift()
@@ -299,8 +311,8 @@ class App(customtkinter.CTk):
         print(df)
         settings = update_current_settings()
         #Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
-        root.textbox.configure(font=("Consolas", 13)) #Only works with consolas, no matter
-        root.textbox.insert("1.0",settings + df + "\n\n")
+        root.textbox.configure(font=("Consolas", 15)) #Only works with consolas, no matter
+        root.textbox.insert("0.0",settings + "\n" + df + "\n\n")
         
 
         #root.textbox.insert("0.0",)
