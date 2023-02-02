@@ -12,3 +12,12 @@
 +This is spaghetti deluxe. but, it looks beautiful
 31/01
 +Added a textbox with a working df-print that shows all changes
+01/02
++Fixed UI and fixed some themes and colouring. 
+02/02
++Tabview
++Settings
++Working time settings
++Error messages printed in GUI
++Working time settings and fallback if wrong input
++Added age button but havn't fixed yet
