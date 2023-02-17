@@ -148,7 +148,7 @@ def generateLink(
     getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}"
     return getLINK
 
-
+    #Only works for 2000 
 # --------------------------------------------------------------------------
 
 # ------------------------Changing Settings---------------------------------

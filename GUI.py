@@ -71,7 +71,7 @@ class App(customtkinter.CTk):
         )
         #Settings tab
         #root.date1 = tk
-        root.radiobutton_frame_3 = customtkinter.CTkTabview(root, width=150,fg_color="#181818",height=40,border_width=0)
+        root.radiobutton_frame_3 = customtkinter.CTkTabview(root, width=150,fg_color="#171717",height=40,border_width=0)
         root.radiobutton_frame_3.grid(row=1, column=4, padx=(10, 10), pady=(10, 0), sticky="nsew")
         root.radiobutton_frame_3.add("Time settings")
         root.radiobutton_frame_3.add("Special settings")
