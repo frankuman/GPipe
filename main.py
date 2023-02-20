@@ -1,6 +1,7 @@
 # imports
 import os
 import GUI
+import API
 import json
 import pyglet
 import pandas as pd
@@ -59,75 +60,59 @@ def load_settings():
     return settings_dict
 
 
-def get_df_str(JSON_response, error_Bool):
-    if error_Bool == False:
-        if JSON_response.status_code == 201:
+def get_df_str(error):
+    if error != 200:
+        if error == 201:
             message = "Created"
-        elif JSON_response.status_code == 204:
+        elif error == 204:
             message = "No Content"
-        elif JSON_response.status_code == 400:
+        elif error == 400:
             message = "Bad Request"
-        elif JSON_response.status_code == 401:
+        elif error == 401:
             message = "Unauthorized"
-        elif JSON_response.status_code == 403:
+        elif error == 403:
             message = "Forbidden"
-        elif JSON_response.status_code == 404:
+        elif error == 404:
             message = "Not Found"
-        elif JSON_response.status_code == 500:
+        elif error == 500:
             message = "Internal Server Error"
         else:
-            JSON_response.message = "Unknown HTTP status code"
+            error = "Unknown HTTP status code"
 
-        return f"ERROR, Couldn't /crawl, ERROR\nHTTP status code: {JSON_response.status_code} ({message})"
+        return f"ERROR, Couldn't /crawl, ERROR\nHTTP status code: {error} ({message})"
     #Warning, spaghetti code
+    ###OPEN FILE AND MAKES JSON_RESPONSE
+    ###
+    with open("JSON/out.json", "r") as f:
+        data = json.load(f)
+
     unique_ids = set()
-    for item in JSON_response:
+    for item in data:
         unique_ids.add(item["id"])
     if len(unique_ids) == 0:
         return "Error, nothing returned from the search"
     #We just make the df pretty
-    new_status = [item for item in JSON_response if item["status"] == "NEW"]
-    df = pd.DataFrame(JSON_response)
+    new_status = [item for item in data if item["status"] == "NEW"]
+    df = pd.DataFrame(data)
     df = df[["owner", "project", "branch", "updated", "insertions", "deletions"]]
     df["owner"] = df["owner"].apply(
         lambda x: x["_account_id"]
     )  # Removes unnecesary lines that makes the df way too long
     df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
     df["project"] = df["project"].str.replace("chromium", "...")
-
+    df['branch'] = df['branch'].apply(lambda x: '/'.join(x.split('/')[-2:])
+                                       if len(x) > 10 else x)
+    df['branch'] = df['branch'].apply(lambda x: '...' + x if len(x) > 10 else x)
     table = PrettyTable()
     # Set the column names
     table.field_names = df.columns.tolist()  # This works, i dont know why
     for row in df.itertuples(index=False):
         table.add_row(row)
     df = str(table)
-    print("Unique IDs found: ", len(unique_ids))
-    print("All NEW changes: ", len(new_status))
+    unique_ids = "Unique IDs found: " + str(len(unique_ids))
+    new_changes = ("All NEW changes: " + str(len(new_status)))
+    df = unique_ids + "\n" + new_changes + "\n" + df
     return df
-
-
-def requestAPICall(url):
-    """
-    does API stuff
-    """
-    response = requests.get(url)
-    if response.status_code == 200:
-        JSON_response = json.loads(response.text[4:])
-        generateJSON(JSON_response)
-        return (JSON_response, True)
-    print("Error Occured")
-    return (response, False)
-
-
-def generateJSON(JSON_response):
-    """
-    Generates and saves the data as a JSON names out.json
-    """
-
-    file_name = "JSON/out.json"
-    with open(file_name, "w") as json_file:
-        json.dump(JSON_response, json_file, indent=4)
-    return
 
 
 def generateLink(
@@ -148,7 +133,7 @@ def generateLink(
     getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}"
     return getLINK
 
-    #Only works for 2000 
+        #Only works for 2000 
 # --------------------------------------------------------------------------
 
 # ------------------------Changing Settings---------------------------------
@@ -218,8 +203,8 @@ def run_GPipe():
     SET_TIME_2 = settings_dict["SET_TIME_2"]
     UTC = settings_dict["UTC"]
     getOPEN = generateLink(PLATFORM, DATE_1, DATE_2, SET_TIME_1, SET_TIME_2, UTC)
-    JSON_response, error_Bool = requestAPICall(getOPEN)
-    return get_df_str(JSON_response, error_Bool)
+    error = API.Gerrit.requestAPICall(getOPEN)
+    return get_df_str(error)
 
 
 platform_Options = {0: chromium, 1: opendev, 2: android}
