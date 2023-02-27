@@ -30,14 +30,15 @@ chromium = "https://chromium-review.googlesource.com"
 
 # Date stuff
 current_date = date.today()
+current_date_2 = current_date-timedelta(days=1)
 time_1 = datetime.now()
-time_2 = time_1 - timedelta(minutes=5)
+time_2 = time_1
 time_1 = time_1.strftime("%H:%M:%S")
 time_2 = time_2.strftime("%H:%M:%S")
 settings_dict_start = {
     "PLATFORM": chromium,
     "DATE_1": current_date.strftime("%Y-%m-%d"),
-    "DATE_2": current_date.strftime("%Y-%m-%d"),
+    "DATE_2": current_date_2.strftime("%Y-%m-%d"),
     "SET_TIME_1": time_1,
     "SET_TIME_2": time_2,
     "UTC": "0100",
@@ -203,7 +204,7 @@ def run_GPipe():
     SET_TIME_2 = settings_dict["SET_TIME_2"]
     UTC = settings_dict["UTC"]
     getOPEN = generateLink(PLATFORM, DATE_1, DATE_2, SET_TIME_1, SET_TIME_2, UTC)
-    error = API.Gerrit.requestAPICall(getOPEN)
+    error = API.Gerrit.requestAPICall(getOPEN,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2)
     return get_df_str(error)
 
 

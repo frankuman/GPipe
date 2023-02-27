@@ -1,6 +1,8 @@
 import json
+import io
 import requests
 import sys
+import GUI
 #Big thanks to @larsks over at 
 #https://stackoverflow.com/questions/75446633/how-do-i-get-more-than-500-codereviews-with-gerrit-rest-api
 
@@ -16,7 +18,7 @@ class Gerrit:
     def __init__(self, baseurl):
         self.baseurl = baseurl
 
-    def changes(self, query, start=None, limit=None, options=None):
+    def changes(self, PLATFORM, query, start=None, limit=None, options=None):
         """This implements the API described in [1].
 
         [1]: https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html
@@ -29,9 +31,12 @@ class Gerrit:
             params["n"] = limit
         if options is not None:
             params["o"] = options
-
-        res = requests.get(f"{self.baseurl}/changes", params=params)
+        if(PLATFORM != "https://review.opendev.org"):
+            res = requests.get(f"{self.baseurl}/changes", params=params)
+        else:
+            res = requests.get(f"{self.baseurl}/changes/", params=params)
         print(f"fetched [{res.status_code}]: {res.url}", file=sys.stderr)
+
         error_code = res.status_code
         return json.loads(res.text[4:]),error_code
 
@@ -47,17 +52,19 @@ class Gerrit:
             json.dump(JSON_response, json_file, indent=4)
         return
 
-    def requestAPICall(url):
+    def requestAPICall(url,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2):
         """
         does API stuff
         """
-        response = Gerrit("https://chromium-review.googlesource.com")
+        response = Gerrit(PLATFORM)
         all_results = []
-
+        date_string = 'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+        print(date_string)
         start = 0
         while True:
             res,error = response.changes(
-                'since:"2022-12-25 00:00:00" before:"2022-12-28 00:30:00"',
+                PLATFORM,
+                date_string,
                 limit=1000,
                 start=start,
             )

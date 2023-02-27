@@ -1,18 +1,12 @@
 import main  # We're going to use circular dependancy until we fix spaghetti
 import os
-import GUI
-import json
-import pyglet
 import pandas as pd
 import customtkinter
 from tkinter import *
 from PIL import Image
-from prettytable import PrettyTable
 from IPython.display import display
-from requests.auth import HTTPBasicAuth
-import pip._vendor.requests as requests
-from tkcalendar import Calendar, DateEntry
-from datetime import date, datetime, timedelta
+import threading
+
 
 
 class App(customtkinter.CTk):
@@ -478,15 +472,17 @@ class App(customtkinter.CTk):
         )
         root.radio_button_6.grid(row=7, column=4, pady=10, padx=20, sticky="n")
     def run_GPipe_event(root):
+        #root.startloading()
         platform = root.radio_var.get()
 
         main.set_Platform(platform)
-        st = root.date_entry_1.get()
-        print("hello?"+st)
-
+        
+        
+    
         main.set_Time(root.date_entry_1.get(),root.date_entry_2.get(),root.time_entry_1.get(),root.time_entry_2.get())
 
         df = main.run_GPipe()
+        #root.stoploading()
         print(df)
         settings = main.update_current_settings()
         # Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
@@ -520,3 +516,4 @@ class App(customtkinter.CTk):
         settings_dict = main.load_settings()
         time_1 = settings_dict["SET_TIME_1"]
         return time_1
+    #Doesnt work yet, shouldn't be implemented now
