@@ -8,6 +8,7 @@ import pandas as pd
 import customtkinter
 from tkinter import *
 from PIL import Image
+import multiprocessing
 from prettytable import PrettyTable
 from IPython.display import display
 from requests.auth import HTTPBasicAuth
@@ -41,9 +42,11 @@ settings_dict_start = {
     "DATE_2": current_date_2.strftime("%Y-%m-%d"),
     "SET_TIME_1": time_1,
     "SET_TIME_2": time_2,
-    "UTC": "0100",
+    "UTC": "0100", 
 }
 
+
+    
 # I do not know if there is a better way to deal with settings,
 # maybe loading and saving them in every function is not so great after all ┬─┬ノ( º _ ºノ)
 # ------------------------Settings--------------------------------------------
@@ -78,7 +81,7 @@ def get_df_str(error):
         elif error == 500:
             message = "Internal Server Error"
         else:
-            error = "Unknown HTTP status code"
+            message = "Unknown HTTP status code"
 
         return f"ERROR, Couldn't /crawl, ERROR\nHTTP status code: {error} ({message})"
     #Warning, spaghetti code
@@ -88,9 +91,12 @@ def get_df_str(error):
         data = json.load(f)
 
     unique_ids = set()
+    unique_change = set()
     for item in data:
         unique_ids.add(item["id"])
-    if len(unique_ids) == 0:
+    for item in data:
+        unique_change.add(item["updated"])
+    if len(unique_ids) == 0: #Dont know if this is best method
         return "Error, nothing returned from the search"
     #We just make the df pretty
     new_status = [item for item in data if item["status"] == "NEW"]
@@ -104,15 +110,18 @@ def get_df_str(error):
     df['branch'] = df['branch'].apply(lambda x: '/'.join(x.split('/')[-2:])
                                        if len(x) > 10 else x)
     df['branch'] = df['branch'].apply(lambda x: '...' + x if len(x) > 10 else x)
+    df['project'] = df['project'].apply(lambda x: '...' + x if len(x) > 10 else x)
     table = PrettyTable()
     # Set the column names
     table.field_names = df.columns.tolist()  # This works, i dont know why
     for row in df.itertuples(index=False):
         table.add_row(row)
+    num_rows = df.shape[0]
     df = str(table)
-    unique_ids = "Unique IDs found: " + str(len(unique_ids))
+    unique_ids = "All IDs found: " + str(len(unique_ids))
+    unique_rows = "All changes found: " + str(num_rows)
     new_changes = ("All NEW changes: " + str(len(new_status)))
-    df = unique_ids + "\n" + new_changes + "\n" + df
+    df = unique_rows + "\n"+ new_changes + "\n"+ unique_ids + "\n" + df
     return df
 
 
@@ -177,6 +186,7 @@ def quit_GPipe():
     """
     Function is used to quit GPipe
     """
+
     print("Quitting GPipe...")
     quit()
 
@@ -195,7 +205,7 @@ Time:  {date_2} {time_2} -> {date_1} {time_1}
     return current_settings
 
 
-def run_GPipe():
+def run_GPipe(root):
     settings_dict = load_settings()
     PLATFORM = settings_dict["PLATFORM"]
     DATE_1 = settings_dict["DATE_1"]
@@ -204,7 +214,7 @@ def run_GPipe():
     SET_TIME_2 = settings_dict["SET_TIME_2"]
     UTC = settings_dict["UTC"]
     getOPEN = generateLink(PLATFORM, DATE_1, DATE_2, SET_TIME_1, SET_TIME_2, UTC)
-    error = API.Gerrit.requestAPICall(getOPEN,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2)
+    error = API.Gerrit.requestAPICall(getOPEN,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root)
     return get_df_str(error)
 
 

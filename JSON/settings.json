@@ -1,8 +1,8 @@
 {
-    "PLATFORM": "https://android-review.googlesource.com",
-    "DATE_1": "2023-02-27",
-    "DATE_2": "2023-02-26",
-    "SET_TIME_1": "17:55:05",
-    "SET_TIME_2": "17:55:05",
+    "PLATFORM": "https://chromium-review.googlesource.com",
+    "DATE_1": "2023-03-02",
+    "DATE_2": "2023-03-01",
+    "SET_TIME_1": "20:09:18",
+    "SET_TIME_2": "20:09:18",
     "UTC": "0100"
 }

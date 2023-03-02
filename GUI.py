@@ -1,9 +1,13 @@
 import main  # We're going to use circular dependancy until we fix spaghetti
 import os
+import time
+from multiprocessing import Process, Pool
 import pandas as pd
 import customtkinter
 from tkinter import *
+import json
 from PIL import Image
+import matplotlib.pyplot as plt
 from IPython.display import display
 import threading
 
@@ -26,13 +30,13 @@ class App(customtkinter.CTk):
         root.grid_columnconfigure((1, 2, 3), weight=1)
         root.grid_rowconfigure((1, 2), weight=2)
         root.grid_rowconfigure((0), weight=1)
-        root.attributes('-alpha',0.99)
+        root.attributes('-alpha',1)
         root.resizable(False, False)  # Optional, but the UI is made for this size
 
         root.title("gpipe")
-        current_path = os.path.dirname(os.path.realpath(__file__))
+        root.current_path = os.path.dirname(os.path.realpath(__file__))
         #Load a font :)
-        customtkinter.FontManager.load_font(current_path+'/font/Poppins-SemiBold.ttf')
+        customtkinter.FontManager.load_font(root.current_path+'/font/Poppins-SemiBold.ttf')
 
  
 
@@ -68,8 +72,7 @@ class App(customtkinter.CTk):
         root.radiobutton_frame_3 = customtkinter.CTkTabview(root, width=150,fg_color="#171717",height=40,border_width=0)
         root.radiobutton_frame_3.grid(row=1, column=4, padx=(10, 10), pady=(10, 0), sticky="nsew")
         root.radiobutton_frame_3.add("Time settings")
-        root.radiobutton_frame_3.add("Special settings")
-        root.radiobutton_frame_3.add("Other settings")
+        root.radiobutton_frame_3.add("Graph settings")
         root.radiobutton_frame_3.tab("Time settings").grid_columnconfigure(0, weight=0)# configure button of individual tabs
         root.radiobutton_frame_3._segmented_button.grid(padx = 20)  
         for root.button in root.radiobutton_frame_3._segmented_button._buttons_dict.values():# configure button of individual tabs
@@ -147,157 +150,78 @@ class App(customtkinter.CTk):
         )
         root.time_entry_2.grid(row=5, column=4, padx=10, pady=(5, 1), sticky="nsew")
 
-        root.settings_text_3 = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Time settings"),
-            text="Age",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
-        )
-        root.settings_text_3.grid(
-            row=2, column=5, columnspan=1, padx=10, pady=(10, 5), sticky="nsew"
-        )
-        #Age
-        root.age_entry_1 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Time settings"),
-            width=110,
-            height=40,
-            border_width=0,
-            placeholder_text="Not needed",
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-        )
-        root.age_entry_1.grid(row=3, column=5, padx=10, pady=(5, 1), sticky="nsew")
 
-        root.settings_text_age = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Time settings"),
-            text="Timeframe",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
-        )
-        root.settings_text_age.grid(
-            row=4, column=5, columnspan=1, padx=10, pady=(10, 5), sticky="nsew"
-        )
-
-        root.optionmenu_1 = customtkinter.CTkOptionMenu(
-            master=root.radiobutton_frame_3.tab("Time settings"),
-            width=110,
-            height=40,
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-            values=["min", "hours", "days","months","years"]
-        )
-        root.optionmenu_1.grid(row=5, column=5, padx=10, pady=(5, 1), sticky="nsew")
-
-
-        
-
-
-        #Special settings
+        #Graph settings
+        ##Popout
         root.tab_2_text = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            text="Special settings",
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            text="Graph settings",
             font=customtkinter.CTkFont(size=24, weight="bold", family="Poppins SemiBold"),
             anchor="w",
         )
         root.tab_2_text.grid(
-            row=1, column=3, columnspan=2, padx=10, pady=(5,1), sticky="nsew"
+            row=1, column=1, columnspan=2, padx=5, pady=(5,1), sticky="nsew"
         )
+        root.popout = IntVar(value=0)
+        root.label_radio_group_2 = customtkinter.CTkLabel(
+            master=root.radiobutton_frame_3.tab("Graph settings"), text="Popout PyPlot?",
+            font=customtkinter.CTkFont(size=16, weight="bold", family="Poppins SemiBold")
+        )
+        root.label_radio_group_2.grid(
+            row=2, column=1, columnspan=1, padx=(5,1), pady=10, sticky="n"
+        )
+        root.radio_button_4 = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.popout,
+            value=0,
+            text="No",
+        )
+        root.radio_button_4.grid(row=3, column=1, pady=5, padx=(5,1), sticky="n")
+        root.radio_button_5 = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.popout,
+            value=1,
+            text="Yes",
+        )
+        root.radio_button_5.grid(row=4, column=1, pady=5, padx=(5,1), sticky="n")
+        ##Dayweekmonth
+        root.sortby_label = customtkinter.CTkLabel(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            text="X-axis",
+            font=customtkinter.CTkFont(size=16, weight="bold", family="Poppins SemiBold")
+        )
+        root.sortby_label.grid(row=2, column=2, columnspan=1, padx=(10,1), pady=10, sticky="n")
+        root.time = IntVar(value=0)
+        root.hour_radio_button = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.time,
+            value=0,
+            text="Hour",
+        )
+        root.hour_radio_button.grid(row=3, column=2, pady=5, padx=(35,1), sticky="n")
 
-        root.tab_2_subtext_1 = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            text="From",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
+        root.day_radio_button = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.time,
+            value=1,
+            text="Day",
         )
-        root.tab_2_subtext_1.grid(
-            row=2, column=3, columnspan=1, padx=10, pady=(10, 1), sticky="nsew"
-        )
+        root.day_radio_button.grid(row=4, column=2, pady=5, padx=(35,1), sticky="n")
 
-        root.tab_2_settings_1 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=110,
-            height=40,
-            border_width=0,
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
+        root.week_radio_button = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.time,
+            value=2,
+            text="Week",
         )
-        root.tab_2_settings_1.grid(row=3, column=3, padx=10, pady=(5, 1), sticky="nsew")
-
-        root.tab_2_subtext_2 = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            text="To",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
+        root.week_radio_button.grid(row=5, column=2, pady=5, padx=(35,1), sticky="n")
+        root.month_radio_button = customtkinter.CTkRadioButton(
+            master=root.radiobutton_frame_3.tab("Graph settings"),
+            variable=root.time,
+            value=3,
+            text="Month",
         )
-        root.tab_2_subtext_2.grid(
-            row=4, column=3, columnspan=1, padx=(10, 5), pady=1, sticky="nsew"
-        )
-
-        root.tab_2_settings_2 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=90,
-            height=40,
-            border_width=0,
-            border_color="#3E454A",
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-        )
-        root.tab_2_settings_2.grid(row=5, column=3, padx=10, pady=1, sticky="nsew")
-
-        root.tab_2_settings_3 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=90,
-            height=40,
-            border_width=0,
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-        )
-        root.tab_2_settings_3.grid(row=3, column=4, padx=10, pady=(5, 1), sticky="nsew")
-
-        root.tab_2_settings_4 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=90,
-            height=40,
-            border_width=0,
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-        )
-        root.tab_2_settings_4.grid(row=5, column=4, padx=10, pady=(5, 1), sticky="nsew")
-
-        root.tab_2_settings_5 = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            text="Age",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
-        )
-        root.tab_2_settings_5.grid(
-            row=2, column=5, columnspan=1, padx=10, pady=(10, 5), sticky="nsew"
-        )
-
-        root.tab_2_settings_6 = customtkinter.CTkEntry(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=110,
-            height=40,
-            border_width=0,
-            placeholder_text="Not needed",
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-        )
-        root.tab_2_settings_6.grid(row=3, column=5, padx=10, pady=(5, 1), sticky="nsew")
-
-        root.tab_2_settings_7 = customtkinter.CTkLabel(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            text="Timeframe",
-            font=customtkinter.CTkFont(size=18, weight="bold", family="Poppins SemiBold"),
-            anchor="w",
-        )
-        root.tab_2_settings_7.grid(
-            row=4, column=5, columnspan=1, padx=10, pady=(10, 5), sticky="nsew"
-        )
-
-        root.optionmenu_2 = customtkinter.CTkOptionMenu(
-            master=root.radiobutton_frame_3.tab("Special settings"),
-            width=110,
-            height=40,
-            font=customtkinter.CTkFont(weight="bold", family="Poppins SemiBold"),
-            values=["min", "hours", "days","months","years"]
-        )
-        root.optionmenu_2.grid(row=5, column=5, padx=10, pady=(5, 1), sticky="nsew")
- 
-
+        root.month_radio_button.grid(row=6, column=2, pady=5, padx=(35,1), sticky="n")
         # check - WIP
         root.checkbox_slider_frame = customtkinter.CTkFrame(root)
         root.checkbox_slider_frame.grid(
@@ -352,24 +276,74 @@ class App(customtkinter.CTk):
             border_width=2,
         )
 
-        root.textbox.grid(row=0, column=3,columnspan=2, padx=(0, 10), pady=(20, 0), sticky="nsew")
+        root.textbox.grid(row=0, column=1,columnspan=4, padx=(10, 10), pady=(20, 0), sticky="nsew")
+       
+        # create graphbox
   
-
-        # create sidebox next to textbox
-        root.radiobutton_frame_2 = customtkinter.CTkFrame(root, corner_radius=8)
-        root.radiobutton_frame_2.grid(
-            row=0, column=1, padx=(10,10), pady=(20, 0), sticky="nsew"
+        root.graph_frame = customtkinter.CTkFrame(root, width=700,corner_radius=8, fg_color="#000000",border_width=0)
+        root.graph_frame.grid(
+            row=1, column=2,columnspan=1,rowspan=3, padx=(10, 5), pady=(20, 20), sticky="nsew"
         )
-        root.radiobutton_frame_3 = customtkinter.CTkFrame(root, corner_radius=8)
-        root.radiobutton_frame_3.grid(
-            row=1, column=3, padx=(10, 10), pady=(20, 0), sticky="nsew"
-        )
-        
-        
+        root.graph_label = customtkinter.CTkLabel(
+            root.graph_frame,
+            text="",width=700
 
+        )
+        root.graph_label.grid(
+            sticky="n",pady=0,padx=(10,0)
+        )
+        root.graph_button_frame = customtkinter.CTkFrame(root, width=100,corner_radius=8, fg_color="#181818",border_width=0)
+        root.graph_button_frame.grid(
+            row=1, column=1,rowspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew"
+        )
+        root.Generation = customtkinter.CTkLabel(
+            root.graph_button_frame,
+            text="Generate",
+            font=customtkinter.CTkFont(size=16, weight="bold", family="Poppins SemiBold"),
+            anchor="center",
+        )
+        root.Generation.grid(
+            row=0, column=0, padx=(25,0), pady=(5,1), sticky="n"
+        )
+        root.graph_button = customtkinter.CTkButton(
+            root.graph_button_frame,
+            fg_color="transparent",
+            border_width=2,
+            height=55,
+            width=root.graph_button_frame._current_width,
+            text="Graph",
+            hover_color="#121212",
+            command=root.run_Graph_event,
+            font=customtkinter.CTkFont(size=15, weight="bold", family="Poppins SemiBold"),
+        )
+        root.graph_button.grid(row=2, column=0, padx=(30,0), pady=10,sticky="n")
+        root.pdf_button = customtkinter.CTkButton(
+            root.graph_button_frame,
+            fg_color="transparent",
+            border_width=2,
+            height=55,
+            width=root.graph_button_frame._current_width,
+            text="PDF",
+            hover_color="#121212",
+            command=root.run_PDF_event,
+            font=customtkinter.CTkFont(size=15, weight="bold", family="Poppins SemiBold"),
+        )
+        root.pdf_button.grid(row=3, column=0, padx=(30,0), pady=10,sticky="n")
+        root.XCEL_button = customtkinter.CTkButton(
+            root.graph_button_frame,
+            fg_color="transparent",
+            border_width=2,
+            height=55,
+            width=root.graph_button_frame._current_width,
+            text="EXCEL",
+            hover_color="#121212",
+            command=root.run_Graph_event,
+            font=customtkinter.CTkFont(size=15, weight="bold", family="Poppins SemiBold"),
+        )
+        root.XCEL_button.grid(row=4, column=0, padx=(30,0), pady=10,sticky="n")
         # Sidebar, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
         root.logo_image = customtkinter.CTkImage(
-            Image.open(current_path + "/images/gpipe.png"), size=(140, 50)
+            Image.open(root.current_path + "/images/gpipe.png"), size=(140, 50)
         )
 
         root.sidebar_frame = customtkinter.CTkFrame(
@@ -401,7 +375,7 @@ class App(customtkinter.CTk):
             height=50,
             anchor="w",
             text="/      Quit",
-            command=main.quit_GPipe,
+            command=root.quit_gpipe_event,
             font=customtkinter.CTkFont(size=20, weight="bold", family="Poppins SemiBold"),
         )
         root.quit_button.grid(row=5, column=0, padx=0, pady=(20, 20))
@@ -472,26 +446,138 @@ class App(customtkinter.CTk):
         )
         root.radio_button_6.grid(row=7, column=4, pady=10, padx=20, sticky="n")
     def run_GPipe_event(root):
-        #root.startloading()
+        """Threading is used within this event
+        to create faster running time and no crashing for the GUI"""
         platform = root.radio_var.get()
 
         main.set_Platform(platform)
         
         
-    
-        main.set_Time(root.date_entry_1.get(),root.date_entry_2.get(),root.time_entry_1.get(),root.time_entry_2.get())
 
-        df = main.run_GPipe()
+        
+        main.set_Time(root.date_entry_1.get(),root.date_entry_2.get(),root.time_entry_1.get(),root.time_entry_2.get())
+        x = threading.Thread(target=root.thread_start)
+        x.setDaemon(True) #We create a Daemon so we can still Quit GPipe
+        x.start()
+        
+        root.textbox.configure(
+            font=("Consolas", 20),  
+        )  
+        
+        if x.is_alive() == True:
+           
+            root.textbox.delete("0.0",END)
+            root.textbox.insert("0.0","GPipe is loading... \nYou should probably grab a coffee\n")
+            
+        #x.join()
+        #df = main.run_GPipe()
         #root.stoploading()
-        print(df)
+        
+    def quit_gpipe_event(root):
+        main.quit_GPipe()
+    def run_Graph_event(root):
+        root.graph_data(root.time.get(),root.popout.get())
+        root.load_graph()
+    def graph_data(root,time = 0,popout = 0):
+        """Reads a JSON file and converts it to a Pandas dataframe.
+          It then groups the data based on a specified time interval and generates 
+          a bar chart using Matplotlib:"""
+        with open("JSON/out.json", "r") as f:
+            data = json.load(f)
+        df = pd.DataFrame(data)
+        df = df[["updated"]]
+        df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
+        #df["updated"] = df["updated"].apply(lambda x: x.split(":")[0] + ":" + x.split(":")[1])
+        #print(df)
+        df['updated'] = pd.to_datetime(df['updated'])
+        plt.style.use('dark_background')
+        
+        if time == 0:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1H')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Hour')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Hour')
+            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 1:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1D')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Day')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Day')
+            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 2:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1W')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Week')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Week')
+            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 3:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1M')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Month')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Month')
+            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+        if popout == 1:
+            plt.ion()
+            plt.show()
+        root.textbox.insert("0.0","PNG generated at "+root.current_path+"/images\n")
+    def run_PDF_event(root):
+        time = root.time.get()
+        with open("JSON/out.json", "r") as f:
+            data = json.load(f)
+        df = pd.DataFrame(data)
+        df = df[["updated"]]
+        df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
+        #df["updated"] = df["updated"].apply(lambda x: x.split(":")[0] + ":" + x.split(":")[1])
+        #print(df)
+        df['updated'] = pd.to_datetime(df['updated'])
+        plt.style.use('dark_background')
+        
+        if time == 0:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1H')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Hour')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Hour')
+            plt.savefig('images/plotPDF.pdf', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 1:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1D')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Day')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Day')
+            plt.savefig('images/plotPDF.pdf', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 2:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1W')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Week')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Week')
+            plt.savefig('images/plotPDF.pdf', facecolor = "black",bbox_inches='tight',dpi=150)
+        elif time == 3:
+            hourly_count = df.groupby(pd.Grouper(key='updated', freq='1M')).size()
+            hourly_count.plot(kind='bar', figsize=(10, 6))
+            plt.xlabel('Month')
+            plt.ylabel('Number of Changes')
+            plt.title('Number of Changes per Month')
+            plt.savefig('images/plotPDF.pdf', facecolor = "black",bbox_inches='tight',dpi=150)
+
+        root.textbox.insert("0.0","PDF generated at "+root.current_path+"/images\n")
+
+    def thread_start(root):
+        root.df = main.run_GPipe(root)
+        print(root.df)
         settings = main.update_current_settings()
         # Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
         root.textbox.configure(
-            font=("Consolas", 14)
+            font=("Consolas", 13)
         )  # Only works with consolas, no matter
         root.textbox.delete("0.0",END)
-        root.textbox.insert("0.0", settings + "\n" + df + "\n\n")
-
+        root.textbox.insert("0.0", settings + "\n" + root.df + "\n\n")
+        
     def load_start_date(root):
 
         settings_dict = main.load_settings()
@@ -504,7 +590,12 @@ class App(customtkinter.CTk):
         date_1 = settings_dict["DATE_1"]
 
         return date_1
-
+    def load_graph(root):
+        
+        root.plot_image = customtkinter.CTkImage(
+            Image.open(root.current_path + "/images/plot.jpg"),size=(700,400)
+        )
+        root.graph_label.configure(image=root.plot_image,anchor=CENTER)
     def load_start_time(root):
 
         settings_dict = main.load_settings()
