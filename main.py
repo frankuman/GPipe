@@ -101,8 +101,11 @@ def get_df_str(error):
     df["project"] = df["project"].str.replace("chromium", "...")
     df['branch'] = df['branch'].apply(lambda x: '/'.join(x.split('/')[-2:])
                                        if len(x) > 10 else x)
+    
     df['branch'] = df['branch'].apply(lambda x: '...' + x if len(x) > 10 else x)
     df['project'] = df['project'].apply(lambda x: '...' + x if len(x) > 10 else x)
+    df["project"] = df["project"].apply(shorten_path)
+    num_unique_owners = df['owner'].nunique()
     table = PrettyTable()
     # Set the column names
     table.field_names = df.columns.tolist()  # This works, i dont know why
@@ -110,12 +113,15 @@ def get_df_str(error):
         table.add_row(row)
     num_rows = df.shape[0]
     df = str(table)
-    unique_ids = "All IDs found: " + str(len(unique_ids))
+    
+    
+    unique_ids = "All Unique IDs found: " + str((num_unique_owners))
     unique_rows = "All changes found: " + str(num_rows)
     new_changes = ("All NEW changes: " + str(len(new_status)))
     df = unique_rows + "\n"+ new_changes + "\n"+ unique_ids + "\n" + df
     return df
-
+def shorten_path(path): #This is truly some chatgpt shit
+    return '/'.join(path.split('/')[-2:])
 
 def generateLink(
     PLATFORM,

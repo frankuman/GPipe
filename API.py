@@ -127,7 +127,7 @@ class Gerrit:
                         
                         )
                     error = err
-                    if start == 19500:
+                    if start == 5000:
                         more_data = True
                         break
                     if not res:

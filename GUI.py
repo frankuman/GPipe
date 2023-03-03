@@ -10,8 +10,31 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from IPython.display import display
 import threading
+welcome = ''' __          __  _                            _           _____ _____ _            
+ \ \        / / | |                          | |         / ____|  __ (_)           
+  \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |  __| |__) | _ __   ___ 
+   \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | | |_ |  ___/ | '_ \ / _ \\
+    \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |__| | |   | | |_) |  __/
+     \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/   \_____|_|   |_| .__/ \___|
+                                                                       | |         
+                                                                       |_|'''
+text = '''
+GPipe is a Gerrit Analysis Pipeline
+GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH)
+Usage:
+(Warning!) Searching all users for about a month timeframe takes around 5 minutes, so try to filter your search!
+Since this was made within 3 months it is prone to crashing if abused (◕‿-)
 
-
+Time settings - Here you can set the time for your search, default is current time-1 day
+Graph settings - Here you can choose the X-axis and if you want to popout pyplot
+Generate graph - If you have made a run you can now generate a graph on that data, you can also change the x-axis in graph settings
+Generate PDF - If you have made a run you can now generate a PDF on that data, you can also change the x-axis in graph settings
+Generate EXCEL - If you have made a run you can now generate an EXCEL on that data
+Platform picker - Here you choose one of the platforms. I have not added authentication but it could probably be done easily, chromium and android is a bit slower than OpenDEV
+is: - Choose a metric, or none, if none it searches all changes.
+/ Crawl - Input a username or similar stuff and crawl by that
+/ Run - Run GPipe with current settings
+/ Quit - Quit GPipe'''
 
 class App(customtkinter.CTk):
     # Set window size
@@ -289,20 +312,27 @@ class App(customtkinter.CTk):
         )
 
         root.textbox.grid(row=0, column=1,columnspan=4, padx=(10, 10), pady=(20, 0), sticky="nsew")
-       
+        root.textbox.configure(
+            font=("Consolas", 13)
+        )  # Only works with consolas, no matter
+        
+        # Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
+
+        root.textbox.delete("0.0",END)
+        root.textbox.insert("0.0", welcome +"\n" +text + "\n")
         # create graphbox
   
-        root.graph_frame = customtkinter.CTkFrame(root, width=700,corner_radius=8, fg_color="#000000",border_width=0)
+        root.graph_frame = customtkinter.CTkFrame(root, width=700,corner_radius=8, fg_color="#121212",border_width=0)
         root.graph_frame.grid(
-            row=1, column=2,columnspan=1,rowspan=3, padx=(10, 5), pady=(20, 20), sticky="nsew"
+            row=1, column=2,columnspan=1,rowspan=3, padx=(10, 5), pady=(20, 0), sticky="nsew"
         )
         root.graph_label = customtkinter.CTkLabel(
             root.graph_frame,
-            text="",width=700
+            text="",width=700, height=400
 
         )
         root.graph_label.grid(
-            sticky="n",pady=0,padx=(10,0)
+            sticky="n",pady=(0,40),padx=(10,0)
         )
         root.graph_button_frame = customtkinter.CTkFrame(root, width=100,corner_radius=8, fg_color="#181818",border_width=0)
         root.graph_button_frame.grid(
@@ -527,28 +557,28 @@ class App(customtkinter.CTk):
             plt.xlabel('Hour')
             plt.ylabel('Number of Changes')
             plt.title('Number of Changes per Hour')
-            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+            plt.savefig('images/plot.jpg',bbox_inches='tight', facecolor = "#121212",dpi=150)
         elif time == 1:
             hourly_count = df.groupby(pd.Grouper(key='updated', freq='1D')).size()
             hourly_count.plot(kind='bar', figsize=(10, 6))
             plt.xlabel('Day')
             plt.ylabel('Number of Changes')
             plt.title('Number of Changes per Day')
-            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+            plt.savefig('images/plot.jpg', facecolor = "#121212",bbox_inches='tight',dpi=150)
         elif time == 2:
             hourly_count = df.groupby(pd.Grouper(key='updated', freq='1W')).size()
             hourly_count.plot(kind='bar', figsize=(10, 6))
             plt.xlabel('Week')
             plt.ylabel('Number of Changes')
             plt.title('Number of Changes per Week')
-            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+            plt.savefig('images/plot.jpg', facecolor = "#121212",bbox_inches='tight',dpi=150)
         elif time == 3:
             hourly_count = df.groupby(pd.Grouper(key='updated', freq='1M')).size()
             hourly_count.plot(kind='bar', figsize=(10, 6))
             plt.xlabel('Month')
             plt.ylabel('Number of Changes')
             plt.title('Number of Changes per Month')
-            plt.savefig('images/plot.jpg', facecolor = "black",bbox_inches='tight',dpi=150)
+            plt.savefig('images/plot.jpg', facecolor = "#121212",bbox_inches='tight',dpi=150)
         if popout == 1:
             plt.ion()
             plt.show()
@@ -634,7 +664,7 @@ class App(customtkinter.CTk):
     def load_graph(root):
         
         root.plot_image = customtkinter.CTkImage(
-            Image.open(root.current_path + "/images/plot.jpg"),size=(700,400)
+            Image.open(root.current_path + "/images/plot.jpg"),size=(650,400)
         )
         root.graph_label.configure(image=root.plot_image,anchor=CENTER)
     def load_start_time(root):
