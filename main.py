@@ -1,13 +1,14 @@
 # imports
-import GUI
-import API
 import json
-import pandas as pd
-import customtkinter
-from tkinter import *
-from prettytable import PrettyTable
 from datetime import date, datetime, timedelta
+from tkinter import *
 
+import customtkinter
+import pandas as pd
+from prettytable import PrettyTable
+
+import API
+import GUI
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme(
@@ -23,7 +24,7 @@ chromium = "https://chromium-review.googlesource.com"
 
 # Date stuff
 current_date = date.today()
-current_date_2 = current_date-timedelta(days=1)
+current_date_2 = current_date - timedelta(days=1)
 time_1 = datetime.now()
 time_2 = time_1
 time_1 = time_1.strftime("%H:%M:%S")
@@ -34,11 +35,10 @@ settings_dict_start = {
     "DATE_2": current_date_2.strftime("%Y-%m-%d"),
     "SET_TIME_1": time_1,
     "SET_TIME_2": time_2,
-    "UTC": "0100", 
+    "UTC": "0100",
 }
 
 
-    
 # I do not know if there is a better way to deal with settings,
 # maybe loading and saving them in every function is not so great after all ┬─┬ノ( º _ ºノ)
 # ------------------------Settings--------------------------------------------
@@ -76,7 +76,7 @@ def get_df_str(error):
             message = "Unknown HTTP status code"
 
         return f"ERROR, Couldn't /crawl, ERROR\nHTTP status code: {error} ({message})"
-    #Warning, spaghetti code
+    # Warning, spaghetti code
     ###OPEN FILE AND MAKES JSON_RESPONSE
     ###
     with open("JSON/out.json", "r") as f:
@@ -88,9 +88,9 @@ def get_df_str(error):
         unique_ids.add(item["id"])
     for item in data:
         unique_change.add(item["updated"])
-    if len(unique_ids) == 0: #Dont know if this is best method
+    if len(unique_ids) == 0:  # Dont know if this is best method
         return "Error, nothing returned from the search"
-    #We just make the df pretty
+    # We just make the df pretty
     new_status = [item for item in data if item["status"] == "NEW"]
     df = pd.DataFrame(data)
     df = df[["owner", "project", "branch", "updated", "insertions", "deletions"]]
@@ -99,13 +99,14 @@ def get_df_str(error):
     )  # Removes unnecesary lines that makes the df way too long
     df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
     df["project"] = df["project"].str.replace("chromium", "...")
-    df['branch'] = df['branch'].apply(lambda x: '/'.join(x.split('/')[-2:])
-                                       if len(x) > 10 else x)
-    
-    df['branch'] = df['branch'].apply(lambda x: '...' + x if len(x) > 10 else x)
-    df['project'] = df['project'].apply(lambda x: '...' + x if len(x) > 10 else x)
+    df["branch"] = df["branch"].apply(
+        lambda x: "/".join(x.split("/")[-2:]) if len(x) > 10 else x
+    )
+
+    df["branch"] = df["branch"].apply(lambda x: "..." + x if len(x) > 10 else x)
+    df["project"] = df["project"].apply(lambda x: "..." + x if len(x) > 10 else x)
     df["project"] = df["project"].apply(shorten_path)
-    num_unique_owners = df['owner'].nunique()
+    num_unique_owners = df["owner"].nunique()
     table = PrettyTable()
     # Set the column names
     table.field_names = df.columns.tolist()  # This works, i dont know why
@@ -113,15 +114,17 @@ def get_df_str(error):
         table.add_row(row)
     num_rows = df.shape[0]
     df = str(table)
-    
-    
+
     unique_ids = "All Unique IDs found: " + str((num_unique_owners))
     unique_rows = "All changes found: " + str(num_rows)
-    new_changes = ("All NEW changes: " + str(len(new_status)))
-    df = unique_rows + "\n"+ new_changes + "\n"+ unique_ids + "\n" + df
+    new_changes = "All NEW changes: " + str(len(new_status))
+    df = unique_rows + "\n" + new_changes + "\n" + unique_ids + "\n" + df
     return df
-def shorten_path(path): #This is truly some chatgpt shit
-    return '/'.join(path.split('/')[-2:])
+
+
+def shorten_path(path):  # This is truly some chatgpt shit
+    return "/".join(path.split("/")[-2:])
+
 
 def generateLink(
     PLATFORM,
@@ -141,19 +144,21 @@ def generateLink(
     getLINK = f"{PLATFORM}/changes/?q=since:{since}+before:{before}"
     return getLINK
 
-        #Only works for 2000 
+    # Only works for 2000
+
+
 # --------------------------------------------------------------------------
 
 # ------------------------Changing Settings---------------------------------
-def set_Time(date_1="",date_2="",time_1="",time_2="",utc_1=""):  # WIP
+def set_Time(date_1="", date_2="", time_1="", time_2="", utc_1=""):  # WIP
     """
     Sets the timeframe, i.e 2022-12-22 06:00:00 -> 2022-12-22 06:15:00
     """
-    print(date_1,date_2,time_1,time_2)
+    print(date_1, date_2, time_1, time_2)
     settings = load_settings()
     global settings_dict_start
-    #We do this so when a Entry has changed, and then deleted so its empty
-    #we can take the standard settings instead.
+    # We do this so when a Entry has changed, and then deleted so its empty
+    # we can take the standard settings instead.
     if date_2 != "":
         settings["DATE_1"] = date_2
     else:
@@ -174,7 +179,7 @@ def set_Time(date_1="",date_2="",time_1="",time_2="",utc_1=""):  # WIP
         settings["UTC"] = utc_1
     else:
         settings["UTC"] = settings_dict_start["UTC"]
-        
+
     print(settings)
     write_settings(settings)
     return
@@ -203,7 +208,7 @@ Time:  {date_2} {time_2} -> {date_1} {time_1}
     return current_settings
 
 
-def run_GPipe(root, crawl = None):
+def run_GPipe(root, crawl=None):
     settings_dict = load_settings()
     PLATFORM = settings_dict["PLATFORM"]
     DATE_1 = settings_dict["DATE_1"]
@@ -211,8 +216,10 @@ def run_GPipe(root, crawl = None):
     SET_TIME_1 = settings_dict["SET_TIME_1"]
     SET_TIME_2 = settings_dict["SET_TIME_2"]
     UTC = settings_dict["UTC"]
-    
-    error = API.Gerrit.requestAPICall(PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root,crawl)
+
+    error = API.Gerrit.requestAPICall(
+        PLATFORM, DATE_1, DATE_2, SET_TIME_1, SET_TIME_2, root, crawl
+    )
     return get_df_str(error)
 
 
