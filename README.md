@@ -10,6 +10,7 @@ metrics. Some minor objectives that I choose to be included is to deliver a dece
 
 Setup:
 ... Not done yet 
+
 Read first:
 Welcome to GPipe! 
 GPipe is not that sophisticated and should not be that hard to learn!
