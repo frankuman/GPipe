@@ -9,23 +9,32 @@ Gerrit, it should also be able to analyse the data extracted and visualise some 
 metrics. Some minor objectives that I choose to be included is to deliver a decent UX.
 
 Setup:
-... Not done yet
+... Not done yet 
 Read first:
 Welcome to GPipe! 
 GPipe is not that sophisticated and should not be that hard to learn!
 
-Time settings - Here you can set the time for your search, default is current time - 1 day
+Time settings - Here you can set the time for your search, default is current time-1 day
+
 Graph settings - Here you can choose the X-axis and if you want to popout pyplot
+
 Generate graph - If you have made a run you can now generate a graph on that data, you can also change the x-axis in graph settings
+
 Generate PDF - If you have made a run you can now generate a PDF on that data, you can also change the x-axis in graph settings
+
 Generate EXCEL - If you have made a run you can now generate a EXCEL on that data
+
 Platform picker - Here you choose one of the platforms. I have
+
 not added authentication but it could probably be done easily, 
 chromium and android is a bit slower than OpenDEV
+
 is: - Choose a metric, or none, if none it searches all changes.
 
 / Crawl - If you have made a run, search that data with the inputed text
+
 / Run - run GPipe with current settings
+
 / Quit - Quit GPipe
 
 
