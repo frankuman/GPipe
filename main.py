@@ -1,19 +1,11 @@
 # imports
-import os
 import GUI
 import API
 import json
-import pyglet
 import pandas as pd
 import customtkinter
 from tkinter import *
-from PIL import Image
-import multiprocessing
 from prettytable import PrettyTable
-from IPython.display import display
-from requests.auth import HTTPBasicAuth
-import pip._vendor.requests as requests
-from tkcalendar import Calendar, DateEntry
 from datetime import date, datetime, timedelta
 
 
@@ -205,7 +197,7 @@ Time:  {date_2} {time_2} -> {date_1} {time_1}
     return current_settings
 
 
-def run_GPipe(root):
+def run_GPipe(root, crawl = None):
     settings_dict = load_settings()
     PLATFORM = settings_dict["PLATFORM"]
     DATE_1 = settings_dict["DATE_1"]
@@ -213,8 +205,8 @@ def run_GPipe(root):
     SET_TIME_1 = settings_dict["SET_TIME_1"]
     SET_TIME_2 = settings_dict["SET_TIME_2"]
     UTC = settings_dict["UTC"]
-    getOPEN = generateLink(PLATFORM, DATE_1, DATE_2, SET_TIME_1, SET_TIME_2, UTC)
-    error = API.Gerrit.requestAPICall(getOPEN,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root)
+    
+    error = API.Gerrit.requestAPICall(PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root,crawl)
     return get_df_str(error)
 
 

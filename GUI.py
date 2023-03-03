@@ -1,10 +1,10 @@
 import main  # We're going to use circular dependancy until we fix spaghetti
 import os
-import time
 from multiprocessing import Process, Pool
 import pandas as pd
 import customtkinter
 from tkinter import *
+import openpyxl
 import json
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -42,7 +42,7 @@ class App(customtkinter.CTk):
 
         # Platform, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
         root.right_top_frame()
-
+        
         # Search button - WIP, doesnt do anything right now
         root.entry = customtkinter.CTkEntry(
             root,
@@ -51,11 +51,12 @@ class App(customtkinter.CTk):
             corner_radius=24,
             fg_color="white",
             text_color="black",
+            
         )
         root.entry.grid(
             row=3, column=4, columnspan=1, padx=(10, 10), pady=(20, 20), sticky="nsew"
         )
-
+        
         root.main_button_1 = customtkinter.CTkButton(
             master=root,
             fg_color="transparent",
@@ -63,6 +64,7 @@ class App(customtkinter.CTk):
             text="/  Crawl",
             font=customtkinter.CTkFont(size=15, weight="bold", family="Poppins SemiBold"),
             hover_color="#181818",
+            command=root.run_Crawl_event
         )
         root.main_button_1.grid(
             row=3, column=5, padx=(20, 20), pady=(20, 20), sticky="nsew"
@@ -232,42 +234,52 @@ class App(customtkinter.CTk):
             master=root.checkbox_slider_frame, text="is:", anchor="n",font=customtkinter.CTkFont(size=16, weight="bold", family="Poppins SemiBold")
         )
         root.checkbox_slider_group_2.grid(row=0, column=0, padx=5, pady=5, sticky="")
-
+        root.open_v = IntVar(value=0)
+        root.watched_v = IntVar(value=0)
+        root.unassigned_v = IntVar(value=0)
+        root.reviewed_v = IntVar(value=0)
+        root.closed_v = IntVar(value=0)
+        root.merged_v = IntVar(value=0)
+        root.pending_v = IntVar(value=0)
+        root.abandoned_v = IntVar(value=0)
         root.checkbox_1 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="open"
+            master=root.checkbox_slider_frame, text="open", variable=root.open_v
         )
         root.checkbox_1.grid(row=1, column=0, pady=(5, 5), padx=20, sticky="n")
 
         root.checkbox_2 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="watched"
+            master=root.checkbox_slider_frame, text="watched", variable=root.watched_v
         )
         root.checkbox_2.grid(row=2, column=0, pady=(5, 5), padx=20, sticky="n")
 
         root.checkbox_3 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="unassigned"
+            master=root.checkbox_slider_frame, text="unassigned", variable=root.unassigned_v
         )
         root.checkbox_3.grid(row=3, column=0, pady=(5, 5), padx=20, sticky="n")
 
         root.checkbox_4 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="reviewed"
+            master=root.checkbox_slider_frame, text="reviewed", variable=root.reviewed_v
         )
         root.checkbox_4.grid(row=4, column=0, pady=(5, 5), padx=20, sticky="n")
 
-        root.checkbox_4 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="closed"
+        root.checkbox_5 = customtkinter.CTkCheckBox(
+            master=root.checkbox_slider_frame, text="closed", variable=root.closed_v
         )
-        root.checkbox_4.grid(row=5, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_5.grid(row=5, column=0, pady=(5, 5), padx=20, sticky="n")
 
-        root.checkbox_4 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="merged"
+        root.checkbox_6 = customtkinter.CTkCheckBox(
+            master=root.checkbox_slider_frame, text="merged", variable=root.merged_v
         )
-        root.checkbox_4.grid(row=6, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_6.grid(row=6, column=0, pady=(5, 5), padx=20, sticky="n")
 
-        root.checkbox_4 = customtkinter.CTkCheckBox(
-            master=root.checkbox_slider_frame, text="pending"
+        root.checkbox_7 = customtkinter.CTkCheckBox(
+            master=root.checkbox_slider_frame, text="pending", variable=root.pending_v
         )
-        root.checkbox_4.grid(row=7, column=0, pady=(5, 5), padx=20, sticky="n")
-
+        root.checkbox_7.grid(row=7, column=0, pady=(5, 5), padx=20, sticky="n")
+        root.checkbox_8 = customtkinter.CTkCheckBox(
+            master=root.checkbox_slider_frame, text="abandonded", variable=root.abandoned_v
+        )
+        root.checkbox_8.grid(row=8, column=0, pady=(5, 5), padx=20, sticky="n")
         # create textbox
         root.textbox = customtkinter.CTkTextbox(
             root,
@@ -337,7 +349,7 @@ class App(customtkinter.CTk):
             width=root.graph_button_frame._current_width,
             text="EXCEL",
             hover_color="#121212",
-            command=root.run_Graph_event,
+            command=root.run_EXCEL_event,
             font=customtkinter.CTkFont(size=15, weight="bold", family="Poppins SemiBold"),
         )
         root.XCEL_button.grid(row=4, column=0, padx=(30,0), pady=10,sticky="n")
@@ -445,39 +457,58 @@ class App(customtkinter.CTk):
             text="Ooga",
         )
         root.radio_button_6.grid(row=7, column=4, pady=10, padx=20, sticky="n")
-    def run_GPipe_event(root):
+    def run_GPipe_event(root,crawl=None):
         """Threading is used within this event
         to create faster running time and no crashing for the GUI"""
         platform = root.radio_var.get()
-
+        
         main.set_Platform(platform)
         
         
 
         
         main.set_Time(root.date_entry_1.get(),root.date_entry_2.get(),root.time_entry_1.get(),root.time_entry_2.get())
-        x = threading.Thread(target=root.thread_start)
-        x.setDaemon(True) #We create a Daemon so we can still Quit GPipe
+        if crawl == None:
+            x = threading.Thread(target=root.thread_start)
+        else:
+            x = threading.Thread(target=root.thread_start(crawl=crawl))
+        x.setDaemon(True) #We create a Daemon so when we quit all other threads this one also
+        #quits. Meaning quit_gpipe_event still works
         x.start()
         
         root.textbox.configure(
-            font=("Consolas", 20),  
+            font=("Consolas", 15),  
         )  
         
         if x.is_alive() == True:
            
             root.textbox.delete("0.0",END)
             root.textbox.insert("0.0","GPipe is loading... \nYou should probably grab a coffee\n")
-            
-        #x.join()
-        #df = main.run_GPipe()
-        #root.stoploading()
+
+    def thread_start(root, crawl = None):
+       
+        if crawl == None:
+            root.df = main.run_GPipe(root)
+        else:
+            root.df = main.run_GPipe(root,crawl)
         
+        root.textbox.configure(
+            font=("Consolas", 13)
+        )  # Only works with consolas, no matter
+        print(root.df)
+        settings = main.update_current_settings()
+        # Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
+
+        root.textbox.delete("0.0",END)
+        root.textbox.insert("0.0", settings + "\n" + root.df + "\n\n")
     def quit_gpipe_event(root):
         main.quit_GPipe()
     def run_Graph_event(root):
         root.graph_data(root.time.get(),root.popout.get())
         root.load_graph()
+    def run_Crawl_event(root):
+        
+        root.run_GPipe_event(crawl=root.entry.get())
     def graph_data(root,time = 0,popout = 0):
         """Reads a JSON file and converts it to a Pandas dataframe.
           It then groups the data based on a specified time interval and generates 
@@ -487,8 +518,6 @@ class App(customtkinter.CTk):
         df = pd.DataFrame(data)
         df = df[["updated"]]
         df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
-        #df["updated"] = df["updated"].apply(lambda x: x.split(":")[0] + ":" + x.split(":")[1])
-        #print(df)
         df['updated'] = pd.to_datetime(df['updated'])
         plt.style.use('dark_background')
         
@@ -524,6 +553,28 @@ class App(customtkinter.CTk):
             plt.ion()
             plt.show()
         root.textbox.insert("0.0","PNG generated at "+root.current_path+"/images\n")
+    def run_EXCEL_event(root):
+        with open("JSON/out.json", "r") as f:
+            data = json.load(f)
+        df = pd.DataFrame(data)
+        
+      
+       
+        #We just make the df pretty
+        
+        df = df[["owner", "project", "branch", "updated", "insertions", "deletions"]]
+        df["owner"] = df["owner"].apply(
+            lambda x: x["_account_id"]
+        )  # Removes unnecesary lines that makes the df way too long
+        df["updated"] = df["updated"].apply(lambda x: x.split(".")[0])
+        df["project"] = df["project"].str.replace("chromium", "...")
+        df['branch'] = df['branch'].apply(lambda x: '/'.join(x.split('/')[-2:])
+                                        if len(x) > 10 else x)
+        df['branch'] = df['branch'].apply(lambda x: '...' + x if len(x) > 10 else x)
+        df['project'] = df['project'].apply(lambda x: '...' + x if len(x) > 10 else x)
+        df.to_excel(excel_writer="images/excelGPipe.xlsx",sheet_name="excelGPipe")
+        root.textbox.insert("0.0","Excel generated at "+root.current_path+"/images\n")
+
     def run_PDF_event(root):
         time = root.time.get()
         with open("JSON/out.json", "r") as f:
@@ -567,16 +618,6 @@ class App(customtkinter.CTk):
 
         root.textbox.insert("0.0","PDF generated at "+root.current_path+"/images\n")
 
-    def thread_start(root):
-        root.df = main.run_GPipe(root)
-        print(root.df)
-        settings = main.update_current_settings()
-        # Credit to help at https://stackoverflow.com/questions/75295073/tkinter-textbox-does-not-look-the-same-as-terminal-print/75295357?noredirect=1#comment132864739_75295357
-        root.textbox.configure(
-            font=("Consolas", 13)
-        )  # Only works with consolas, no matter
-        root.textbox.delete("0.0",END)
-        root.textbox.insert("0.0", settings + "\n" + root.df + "\n\n")
         
     def load_start_date(root):
 

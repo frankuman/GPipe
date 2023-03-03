@@ -3,7 +3,6 @@ import requests
 import pandas as pd
 from pygerrit2 import HTTPBasicAuth
 import sys
-import GUI
 #Big thanks to @larsks over at 
 #https://stackoverflow.com/questions/75446633/how-do-i-get-more-than-500-codereviews-with-gerrit-rest-api
 
@@ -45,7 +44,7 @@ class Gerrit:
             font=("Consolas", 20)
         )  # Only works with consolas, no matter
         print(f"fetched [{res.status_code}]: {res.url}", file=sys.stderr)
-        a = "fetched: status = " + str(res.status_code)
+        a = "fetched: status = " + str(res.status_code) +" query = "+ query
         root.textbox.insert("1.0", a + "\n")
 
         #print(res.text[4:])
@@ -68,17 +67,23 @@ class Gerrit:
             json.dump(JSON_response, json_file, indent=4)
         return
 
-    def requestAPICall(url,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root):
+    def requestAPICall(PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root,crawl=None):
         """
         does API stuff
         """
         if(PLATFORM != "https://review.opendev.org"):
-            error = Gerrit.REST_call_google(url,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root)
+            error = Gerrit.REST_call_google(PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root,crawl)
             return error
         else:
             response = Gerrit(PLATFORM)
+            is_query = Gerrit.get_is_queries(root)
+            
             all_results = []
-            date_string = 'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+            if crawl != None:
+                date_string = crawl+" "+is_query+'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+            else:
+                date_string = is_query+'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+
             print(date_string)
             start = 0
             while True:
@@ -97,14 +102,19 @@ class Gerrit:
                 start += len(res)
             Gerrit.generateJSON(all_results)
             return error
-    def REST_call_google(url,PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root):
+    def REST_call_google(PLATFORM,DATE_1,DATE_2,SET_TIME_1,SET_TIME_2,root,crawl=None):
             all_results = []
             response = Gerrit(PLATFORM)
+            is_query = Gerrit.get_is_queries(root)
+            
             more_data = True
             error = 0
             while more_data == True:
                 
-                date_string = 'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+                if crawl != None:
+                    date_string = crawl+" "+is_query+'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
+                else:
+                    date_string = is_query+'since:"'+DATE_2+" "+SET_TIME_2+'" before:"'+DATE_1+" "+SET_TIME_1+'"'
                 print(date_string)
                 start = 0
                 while True:
@@ -145,3 +155,35 @@ class Gerrit:
         last_date, last_time = last_updated.split(' ')
         print(last_updated)
         return last_date,last_time
+    def get_is_queries(root):
+        open = root.open_v.get()
+        watched = root.watched_v.get()
+        unassigned = root.unassigned_v.get()
+        reviewed = root.reviewed_v.get()
+        closed = root.closed_v.get()
+        merged = root.merged_v.get()
+        pending = root.pending_v.get()
+        abandoned = root.abandoned_v.get()
+        query_string = ""
+        if open == 1:
+            query_string += "+is:open"
+        if watched == 1:
+            query_string += "+is:watched"
+        if unassigned == 1:
+            query_string += "+is:unassigned"
+        if reviewed == 1:
+            query_string += "+is:reviewed"
+        if closed == 1:
+            query_string += "+is:closed"
+        if merged == 1:
+            query_string += "+is:merge"
+        if pending == 1:
+            query_string += "+is:pending"
+        if abandoned == 1:
+            query_string += "+is:abandoned"
+        if query_string != "":
+            query_string = query_string[1:]
+            query_string = query_string.strip()
+            query_string = query_string + " "
+        
+        return(query_string)
