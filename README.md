@@ -17,7 +17,7 @@
      <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
     <li><b>3. (RECOMMENDED)</b>pip install -r requirements.txt</li>
     <li><b>4. (RECOMMENDED)</b>python main.py</li>
-    <p>If you don't know about Python or pip, you can just make a shortcut of the gpipe1.0.exe and run that shortcut from anywhere</p>
+    <p>(WINDOWS USERS)If you don't know about Python or pip, you can just make a shortcut of the gpipe1.0.exe and run that shortcut from anywhere</p>
     <li><b>5. </b>Have fun!</li>
      
   </ul>
