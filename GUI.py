@@ -2,7 +2,7 @@ import json
 import os
 import threading
 from tkinter import *
-
+import matplotlib.backends.backend_pdf
 import customtkinter
 import matplotlib.pyplot as plt
 import openpyxl
@@ -69,7 +69,7 @@ class App(customtkinter.CTk):
         root.current_path = os.path.dirname(os.path.realpath(__file__))
         # Load a font :)
         customtkinter.FontManager.load_font(
-            root.current_path + "/assets/font/Poppins-SemiBold.ttf"
+             "assets/font/Poppins-SemiBold.ttf"
         )
 
         # Platform, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
@@ -448,7 +448,7 @@ class App(customtkinter.CTk):
         root.XCEL_button.grid(row=4, column=0, padx=(30, 0), pady=10, sticky="n")
         # Sidebar, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
         root.logo_image = customtkinter.CTkImage(
-            Image.open(root.current_path + "/assets/images/gpipe.png"), size=(140, 50)
+            Image.open("assets/images/gpipe.png"), size=(140, 50)
         )
 
         root.sidebar_frame = customtkinter.CTkFrame(
@@ -635,8 +635,10 @@ class App(customtkinter.CTk):
 
         Args:
             root
-        """        
-        main.quit_GPipe()
+        """
+        root.destroy()        
+        root.quit()
+        
 
     def run_Graph_event(root):
         """starts gpipe as a event
@@ -714,7 +716,7 @@ class App(customtkinter.CTk):
             plt.ion()
             plt.show()
         root.textbox.insert(
-            "0.0", "PNG generated at " + root.current_path + "/generations\n"
+            "0.0", "PNG generated at \generations folder\n"
         )
 
     def run_EXCEL_event(root):
@@ -742,7 +744,7 @@ class App(customtkinter.CTk):
         df["project"] = df["project"].apply(lambda x: "..." + x if len(x) > 10 else x)
         df.to_excel(excel_writer="generations/excelGPipe.xlsx", sheet_name="excelGPipe")
         root.textbox.insert(
-            "0.0", "Excel generated at " + root.current_path + "/generations\n"
+            "0.0", "Excel generated at \generations folder\n"
         )
 
     def run_PDF_event(root):
@@ -800,7 +802,7 @@ class App(customtkinter.CTk):
             )
 
         root.textbox.insert(
-            "0.0", "PDF generated at " + root.current_path + "/generations\n"
+            "0.0", "PDF generated at \generations folder\n"
         )
 
     def load_start_date(root):
@@ -837,7 +839,7 @@ class App(customtkinter.CTk):
             root
         """
         root.plot_image = customtkinter.CTkImage(
-            Image.open(root.current_path + "/generations/plot.jpg"), size=(650, 400)
+            Image.open("generations/plot.jpg"), size=(650, 400)
         )
         root.graph_label.configure(image=root.plot_image, anchor=CENTER)
 
