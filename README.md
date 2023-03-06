@@ -4,7 +4,7 @@
 
 <body>
   <div align="center">
-    <img src="https://github.com/frankuman/GPipe/blob/main/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
+    <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
     <p>GPipe is a Gerrit Analysis Pipeline</p>
     <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH)</p>
   </div>
