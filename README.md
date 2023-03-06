@@ -7,6 +7,7 @@
     <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
     <p>GPipe is a Gerrit Analysis Pipeline</p>
     <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH)</p>
+    <p>You'll need git, python 3.x(recommended) and pip(recommended). There is a executable but I higly do not recommend it</p>
   </div>
 
   <h2>Setup</h2>
