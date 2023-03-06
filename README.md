@@ -48,6 +48,7 @@
     <h2>Current GUI with latest additions</h2>
     <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
+  <p><b>Thank you Testers, Gustav B</b></p>
  </body>
 
 </html>
