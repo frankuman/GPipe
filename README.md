@@ -1,9 +1,11 @@
+
+# GPipe - The Gerrit Analysis Pipeline
 <!DOCTYPE html>
 <html>
   
   <body>
     <div align="center">
-      <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
+      <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/introcard.png?raw=true" width="900" title="GPipe Logo">
       <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
       <p>To use and install this tool, it is recommended that you'll need </p>
