@@ -46,7 +46,7 @@
 
   <div align="center">
     <h2>Current GUI with latest additions</h2>
-    <img src="https://i.gyazo.com/be6c2c93afa34a7fb7ebd90a8b416764.png" width="1000" title="Current UI">
+    <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
  </body>
 
