@@ -12,7 +12,7 @@
   <h2>Setup</h2>
   <p>First time installation</p>
 <ul>
-    <p>This has only been tested on Windows 8/Ubuntu with Python 3.9/10</p>
+    <p>This has only been tested on Windows 10/Ubuntu with Python 3.9/10</p>
     <li><b>1. </b>First use "git clone https://github.com/frankuman/GPipe"</li>
     <li><b>2. </b>Open a terminal window in the folder by writing in the text window</li>
      <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
