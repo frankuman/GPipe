@@ -15,7 +15,16 @@
        </ul> 
         <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
-    <h2>Setup</h2>
+    <h2>Easy Setup</h2>
+    <p>For non technical users:</p>
+    <ul>
+      <li><strong>1.</strong> Press the green code button to the top right and press <strong>Download ZIP</strong></li>
+      <li><strong>2.</strong> Unpack the folder you downloaded to the desired place
+      <li><strong>3.</strong> Run GPipe.exe, it should be the one with the gp icon. Windows antivirus will likely tell you something is wrong, but this is just
+      because of python executables looking unsafe</code></li>
+      <li><strong>4.</strong> The software should be running now</code></li>
+    </ul>
+    <h2>Normal Setup</h2>
     <p>First-time installation:</p>
     <ul>
       <li><strong>1.</strong> Clone the repository: <code>git clone https://github.com/frankuman/GPipe</code></li>
