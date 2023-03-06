@@ -1,5 +1,8 @@
 
-# GPipe - The Gerrit Analysis Pipeline
+  <div align="center">
+    <h2>gpipe - A Gerrit Analysis Pipeline</h2>
+    
+  </div>
 <!DOCTYPE html>
 <html>
   
@@ -12,7 +15,7 @@
       <ul>
         <p><b>1. Python 3.x </b></p>
         <p><b>2. Pip </b></p>
-       </ul> 
+       </ul>
         <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
     <h2>Easy Setup</h2>
