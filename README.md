@@ -9,7 +9,8 @@
   <body>
     <div align="center">
       <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/introcard.png?raw=true" width="900" title="GPipe Logo">
-      <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
+      <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline that uses the Gerrit REST API to fetch changes made to Chromium, OpenDEV or android, and presents them
+     using graphs or excel.</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
       <p>To use and install this tool, it is recommended that you'll need </p>
       <ul>
