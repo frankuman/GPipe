@@ -6,11 +6,10 @@
       <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
       <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
-      <p>To use and install this tool, you'll need </p>
+      <p>To use and install this tool, it is recommended that you'll need </p>
       <ul>
-        <p><b>1. Git</b></p>
-        <p><b>2. Python 3.x (recommended)</b></p>
-        <p><b>3. Pip (recommended)</b></p>
+        <p><b>1. Python 3.x </b></p>
+        <p><b>2. Pip </b></p>
        </ul> 
         <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
