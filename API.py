@@ -1,7 +1,6 @@
 import json
 import requests
 import pandas as pd
-from pygerrit2 import HTTPBasicAuth
 import sys
 
 # Big thanks to @larsks over at
@@ -62,7 +61,7 @@ class Gerrit:
         """
         # Here we're just dumping all the results as a JSON document on
         # stdout.
-        file_name = "JSON/out.json"
+        file_name = "src/JSON/out.json"
         with open(file_name, "w") as json_file:
             json.dump(JSON_response, json_file, indent=4)
         return
@@ -193,7 +192,7 @@ class Gerrit:
         return error
 
     def generate_new_date(all_results):
-        with open("JSON/out.json", "r") as f:
+        with open("src/JSON/out.json", "r") as f:
             data = json.load(f)
         df = pd.DataFrame(data)
         df = df["updated"].apply(lambda x: x.split(".")[0])

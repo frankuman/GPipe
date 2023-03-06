@@ -7,7 +7,6 @@ import customtkinter
 import matplotlib.pyplot as plt
 import openpyxl
 import pandas as pd
-from IPython.display import display
 from PIL import Image
 
 import main  # We're going to use circular dependancy until we fix spaghetti
@@ -70,7 +69,7 @@ class App(customtkinter.CTk):
         root.current_path = os.path.dirname(os.path.realpath(__file__))
         # Load a font :)
         customtkinter.FontManager.load_font(
-            root.current_path + "/font/Poppins-SemiBold.ttf"
+            root.current_path + "/assets/font/Poppins-SemiBold.ttf"
         )
 
         # Platform, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
@@ -449,7 +448,7 @@ class App(customtkinter.CTk):
         root.XCEL_button.grid(row=4, column=0, padx=(30, 0), pady=10, sticky="n")
         # Sidebar, https://github.com/TomSchimansky/CustomTkinter/blob/master/examples/complex_example.py
         root.logo_image = customtkinter.CTkImage(
-            Image.open(root.current_path + "/images/gpipe.png"), size=(140, 50)
+            Image.open(root.current_path + "/assets/images/gpipe.png"), size=(140, 50)
         )
 
         root.sidebar_frame = customtkinter.CTkFrame(
@@ -667,7 +666,7 @@ class App(customtkinter.CTk):
             popout (int, optional): Defaults to 0.
         """        
         
-        with open("JSON/out.json", "r") as f:
+        with open("src/JSON/out.json", "r") as f:
             data = json.load(f)
         df = pd.DataFrame(data)
         df = df[["updated"]]
@@ -682,7 +681,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Hour")
             plt.savefig(
-                "images/plot.jpg", bbox_inches="tight", facecolor="#121212", dpi=150
+                "generations/plot.jpg", bbox_inches="tight", facecolor="#121212", dpi=150
             )
         elif time == 1:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1D")).size()
@@ -691,7 +690,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Day")
             plt.savefig(
-                "images/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
+                "generations/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
             )
         elif time == 2:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1W")).size()
@@ -700,7 +699,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Week")
             plt.savefig(
-                "images/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
+                "generations/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
             )
         elif time == 3:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1M")).size()
@@ -709,13 +708,13 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Month")
             plt.savefig(
-                "images/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
+                "generations/plot.jpg", facecolor="#121212", bbox_inches="tight", dpi=150
             )
         if popout == 1:
             plt.ion()
             plt.show()
         root.textbox.insert(
-            "0.0", "PNG generated at " + root.current_path + "/images\n"
+            "0.0", "PNG generated at " + root.current_path + "/generations\n"
         )
 
     def run_EXCEL_event(root):
@@ -724,7 +723,7 @@ class App(customtkinter.CTk):
         Args:
             root
         """        
-        with open("JSON/out.json", "r") as f:
+        with open("src/JSON/out.json", "r") as f:
             data = json.load(f)
         df = pd.DataFrame(data)
 
@@ -741,9 +740,9 @@ class App(customtkinter.CTk):
         )
         df["branch"] = df["branch"].apply(lambda x: "..." + x if len(x) > 10 else x)
         df["project"] = df["project"].apply(lambda x: "..." + x if len(x) > 10 else x)
-        df.to_excel(excel_writer="images/excelGPipe.xlsx", sheet_name="excelGPipe")
+        df.to_excel(excel_writer="generations/excelGPipe.xlsx", sheet_name="excelGPipe")
         root.textbox.insert(
-            "0.0", "Excel generated at " + root.current_path + "/images\n"
+            "0.0", "Excel generated at " + root.current_path + "/generations\n"
         )
 
     def run_PDF_event(root):
@@ -753,7 +752,7 @@ class App(customtkinter.CTk):
             root
         """        
         time = root.time.get()
-        with open("JSON/out.json", "r") as f:
+        with open("src/JSON/out.json", "r") as f:
             data = json.load(f)
         df = pd.DataFrame(data)
         df = df[["updated"]]
@@ -770,7 +769,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Hour")
             plt.savefig(
-                "images/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
+                "generations/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
             )
         elif time == 1:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1D")).size()
@@ -779,7 +778,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Day")
             plt.savefig(
-                "images/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
+                "generations/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
             )
         elif time == 2:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1W")).size()
@@ -788,7 +787,7 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Week")
             plt.savefig(
-                "images/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
+                "generations/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
             )
         elif time == 3:
             hourly_count = df.groupby(pd.Grouper(key="updated", freq="1M")).size()
@@ -797,11 +796,11 @@ class App(customtkinter.CTk):
             plt.ylabel("Number of Changes")
             plt.title("Number of Changes per Month")
             plt.savefig(
-                "images/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
+                "generations/plotPDF.pdf", facecolor="black", bbox_inches="tight", dpi=150
             )
 
         root.textbox.insert(
-            "0.0", "PDF generated at " + root.current_path + "/images\n"
+            "0.0", "PDF generated at " + root.current_path + "/generations\n"
         )
 
     def load_start_date(root):
@@ -838,7 +837,7 @@ class App(customtkinter.CTk):
             root
         """
         root.plot_image = customtkinter.CTkImage(
-            Image.open(root.current_path + "/images/plot.jpg"), size=(650, 400)
+            Image.open(root.current_path + "/generations/plot.jpg"), size=(650, 400)
         )
         root.graph_label.configure(image=root.plot_image, anchor=CENTER)
 

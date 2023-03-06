@@ -1,7 +1,7 @@
 # imports
 import json
 from datetime import date, datetime, timedelta
-from tkinter import *
+import tkinter
 
 import customtkinter
 import pandas as pd
@@ -12,7 +12,7 @@ import GUI
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme(
-    "JSON/theme.json"
+    "src/JSON/theme.json"
 )  # Themes: "blue" (standard), "green", "dark-blue"
 customtkinter.set_widget_scaling(0.95)
 
@@ -43,13 +43,13 @@ settings_dict_start = {
 # maybe loading and saving them in every function is not so great after all ┬─┬ノ( º _ ºノ)
 # ------------------------Settings--------------------------------------------
 def write_settings(settings):
-    file_name = "JSON/settings.json"
+    file_name = "src/JSON/settings.json"
     with open(file_name, "w") as settings_file:
         json.dump(settings, settings_file, indent=4)
 
 
 def load_settings():
-    file_name = "JSON/settings.json"
+    file_name = "src/JSON/settings.json"
     with open(file_name, "r") as settings_file:
         settings_str = settings_file.read()
         settings_dict = json.loads(settings_str)
@@ -79,7 +79,7 @@ def get_df_str(error):
     # Warning, spaghetti code
     ###OPEN FILE AND MAKES JSON_RESPONSE
     ###
-    with open("JSON/out.json", "r") as f:
+    with open("src/JSON/out.json", "r") as f:
         data = json.load(f)
 
     unique_ids = set()
