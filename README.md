@@ -4,7 +4,7 @@
 
 <body>
   <div align="center">
-    <img src="https://github.com/frankuman/GPipe/blob/main/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
+    <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
     <p>GPipe is a Gerrit Analysis Pipeline</p>
     <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH)</p>
   </div>
@@ -15,7 +15,7 @@
     <li><b>1. </b>First use "git clone https://github.com/frankuman/GPipe"</li>
     <li><b>2. </b>Open a terminal window in the folder by writing in the text window</li>
      <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
-    <li><b>3.</b>pip install -r requirements.txt</li>
+    <li><b>3. </b>pip install -r requirements.txt</li>
     <li><b>4. </b>python main.py</li>
     <li><b>5. </b>Have fun!</li>
      
