@@ -1,9 +1,11 @@
+
+# GPipe - The Gerrit Analysis Pipeline
 <!DOCTYPE html>
 <html>
   
   <body>
     <div align="center">
-      <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
+      <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/introcard.png?raw=true" width="900" title="GPipe Logo">
       <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
       <p>To use and install this tool, it is recommended that you'll need </p>
@@ -13,7 +15,16 @@
        </ul> 
         <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
-    <h2>Setup</h2>
+    <h2>Easy Setup</h2>
+    <p>For non technical users:</p>
+    <ul>
+      <li><strong>1.</strong> Press the green code button to the top right and press <strong>Download ZIP</strong></li>
+      <li><strong>2.</strong> Unpack the folder you downloaded to the desired place
+      <li><strong>3.</strong> Run GPipe.exe, it should be the one with the gp icon. Windows antivirus will likely tell you something is wrong, but this is just
+      because of python executables looking unsafe</code></li>
+      <li><strong>4.</strong> The software should be running now</code></li>
+    </ul>
+    <h2>Normal Setup</h2>
     <p>First-time installation:</p>
     <ul>
       <li><strong>1.</strong> Clone the repository: <code>git clone https://github.com/frankuman/GPipe</code></li>
@@ -48,7 +59,8 @@
     <h2>Current GUI with latest additions</h2>
     <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
-  <p><b>Thank you Testers, Gustav B</b></p>
+   <h2>Testers</h2>
+  <p><b>Thank you testers, Gustav B(win10), Elias E(win10)</b></p>
  </body>
 
 </html>
