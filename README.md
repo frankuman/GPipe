@@ -1,6 +1,6 @@
 
   <div align="center">
-    <h2>gpipe - A Gerrit Analysis Pipeline</h2>
+    <h2>GPipe - A Gerrit Analysis Pipeline</h2>
     
   </div>
 <!DOCTYPE html>
