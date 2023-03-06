@@ -16,7 +16,7 @@
     <li><b>2. </b>Open a terminal window in the folder by writing in the text window</li>
      <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
     <li><b>3. </b>pip install -r requirements.txt</li>
-    li><b>Ubuntu users also need to do sudo apt-get python3-tk</b>p</li>
+    <li><b>Ubuntu users also need to do sudo apt-get python3-tk</b></li>
     
    
  </ul>
