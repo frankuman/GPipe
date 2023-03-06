@@ -6,13 +6,19 @@
       <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/gpipe.png?raw=true" width="500" title="GPipe Logo">
       <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
-      <p>You'll need git, Python 3.x (recommended), and pip (recommended). There is an executable, but I highly do not recommend it.</p>
+      <p>To use and install this tool, you'll need </p>
+      <ul>
+        <p><b>1. Git</b></p>
+        <p><b>2. Python 3.x (recommended)</b></p>
+        <p><b>3. Pip (recommended)</b></p>
+       </ul> 
+        <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
     <h2>Setup</h2>
     <p>First-time installation:</p>
     <ul>
       <li><strong>1.</strong> Clone the repository: <code>git clone https://github.com/frankuman/GPipe</code></li>
-      <li><strong>2.</strong> Open a terminal window in the folder by typing: <code>cd GPipe</code> or writing cmd in the fileinput</li>
+      <li><strong>2.</strong> Open a terminal window in the folder by typing: <code>cd GPipe</code> or by writing cmd in the fileinput</li>
        <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
       <li><strong>3.</strong> Install the required packages: <code>pip install -r requirements.txt</code></li>
       <li><strong>4.</strong> Ubuntu users also need to run: <code>sudo apt-get python3-tk</code></li>
