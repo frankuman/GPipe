@@ -16,7 +16,7 @@
         <p><b>1. Python 3.x </b></p>
         <p><b>2. Pip </b></p>
        </ul>
-        <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
+        <p>While there is an executable available, *it is not recommended to use it*. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
     <h2>Easy Setup</h2>
     <p>For non technical users:</p>
