@@ -15,12 +15,18 @@
     <li><b>1. </b>First use "git clone https://github.com/frankuman/GPipe"</li>
     <li><b>2. </b>Open a terminal window in the folder by writing in the text window</li>
      <img src="https://i.gyazo.com/aedeeea741fc0d4bf40a54ad337ca14b.png" width="500" title="Write in the fileentry">
-    <li><b>3. (RECOMMENDED)</b>pip install -r requirements.txt</li>
-    <li><b>4. (RECOMMENDED)</b>python main.py</li>
-    <p>(WINDOWS USERS) If you don't know about Python or pip, you can just make a shortcut of the gpipe1.0.exe and run that shortcut from anywhere</p>
-    <li><b>5. </b>Have fun!</li>
+    <li><b>3. </b>pip install -r requirements.txt</li>
+   
+ </ul>
+    <h2>Run</h2>
+  <p>How to run</p>
+<ul>
+    <li><b>(RECOMMENDED)</b> python main.py</li>
+    <li><b>(WINDOWS USERS)</b> If you don't know about Python or pip, you can just make a shortcut of the gpipe1.0.exe and run that shortcut from anywhere</li>
+    <li><b>Have fun!</b></li>
      
   </ul>
+  
   <h2>Usage</h2>
   <p>GPipe is not that sophisticated and should not be that hard to learn!</p>
   <ul>
