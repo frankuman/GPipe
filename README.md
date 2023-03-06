@@ -26,7 +26,7 @@
     <p>How to run:</p>
     <ul>
       <li><strong>(RECOMMENDED)</strong> Run the script with: <code>python main.py</code></li>
-      <li><strong>(WINDOWS USERS)</strong> If you don't know about Python or pip, you can just make a shortcut of the gpipe1.0.exe and run that shortcut from anywhere</li>
+      <li><strong>(WINDOWS USERS)</strong> If you don't know about Python or pip, you can just make a shortcut of the GPipe.exe and run that shortcut from anywhere</li>
       <li><strong>Have fun!</strong></li>
     </ul>
     <h2>Usage</h2>
@@ -46,8 +46,9 @@
 
   <div align="center">
     <h2>Current GUI with latest additions</h2>
-    <img src="https://i.gyazo.com/be6c2c93afa34a7fb7ebd90a8b416764.png" width="1000" title="Current UI">
+    <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
+  <p><b>Thank you Testers, Gustav B</b></p>
  </body>
 
 </html>
