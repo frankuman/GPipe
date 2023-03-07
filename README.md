@@ -64,7 +64,7 @@
     <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
    <h2>Testers</h2>
-  <p><b>Thank you testers, Gustav B(win10), Elias E(win10), Edwin Ö(win10)</b></p>
+  <p><b>Thank you testers, Gustav B(win10), Elias E(win10), Edwin Ö(win10), Philippe D</b></p>
  </body>
 
 </html>
