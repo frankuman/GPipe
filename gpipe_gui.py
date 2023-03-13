@@ -38,7 +38,7 @@ Time settings - Here you can set the time for your search, default is current ti
 Graph settings - Here you can choose the X-axis and if you want to popout pyplot
 Generate graph - If you have made a run you can now generate a graph on that data, you can also change the x-axis in graph settings
 Generate PDF - If you have made a run you can now generate a PDF on that data, you can also change the x-axis in graph settings
-Generate Eexcel - If you have made a run you can now generate an Eexcel on that data
+Generate Excel - If you have made a run you can now generate an Excel on that data
 Platform picker - Here you choose one of the platforms. I have not added authentication but it could probably be done easily, chromium and android is a bit slower than OpenDEV
 is: - Choose a metric, or none, if none it searches all changes.
 / Crawl - Input a username or similar stuff and crawl by that
@@ -72,6 +72,9 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(2, weight=1)
         self.grid_columnconfigure(3, weight=1)
 
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
         self.attributes("-alpha", 1)
         # Optional, but the UI is made for this size
         self.resizable(False, False)
@@ -445,7 +448,7 @@ class App(customtkinter.CTk):
             border_width=2,
             height=55,
             width=int(self.graph_button_frame._current_width),
-            text="Eexcel",
+            text="Excel",
             hover_color="#121212",
             command=self.run_excel_event,
             font=customtkinter.CTkFont(
@@ -460,10 +463,10 @@ class App(customtkinter.CTk):
         )
 
         self.sidebar_frame = customtkinter.CTkFrame(
-            self, width=140, corner_radius=0, fg_color="#000000"
+            self, width=140,height=800, corner_radius=0, fg_color="#000000"
         )
-        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="ns",pady=(0,0))
+        self.sidebar_frame.grid_rowconfigure(4, weight=2)
         self.logo_image_label = customtkinter.CTkLabel(
             self.sidebar_frame,
             image=self.logo_image,
@@ -495,7 +498,7 @@ class App(customtkinter.CTk):
                 size=20, weight="bold", family="Poppins SemiBold"
             ),
         )
-        self.quit_button.grid(row=5, column=0, padx=0, pady=(20, 20))
+        self.quit_button.grid(row=5, column=0, padx=0, pady=(20, 10))
 
     def right_top_frame(self):
         """right top frame
