@@ -1,19 +1,23 @@
 
-# GPipe - The Gerrit Analysis Pipeline
+  <div align="center">
+    <h2>GPipe - A Gerrit Analysis Pipeline</h2>
+    
+  </div>
 <!DOCTYPE html>
 <html>
   
   <body>
     <div align="center">
       <img src="https://github.com/frankuman/GPipe/blob/main/assets/images/introcard.png?raw=true" width="900" title="GPipe Logo">
-      <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline</p>
+      <p><strong>GPipe</strong> is a Gerrit Analysis Pipeline that uses the Gerrit REST API to fetch changes made to Chromium, OpenDEV or android, and presents them
+     using graphs or excel.</p>
       <p>GPipe was made by Oliver Bölin during a university course at Blekinge Tekniska University (BTH).</p>
       <p>To use and install this tool, it is recommended that you'll need </p>
       <ul>
         <p><b>1. Python 3.x </b></p>
         <p><b>2. Pip </b></p>
-       </ul> 
-        <p>While there is an executable available, it is not recommended to use it. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
+       </ul>
+        <p>While there is an executable available, *it is not recommended to use it*. Instead, it is recommended that you install Python, and pip separately and then run the tool using the provided Python script.</p>
     </div>
     <h2>Easy Setup</h2>
     <p>For non technical users:</p>
@@ -60,7 +64,7 @@
     <img src="https://i.gyazo.com/9f3f3901ad4f274a960b7eb24d18d821.png" width="1000" title="Current UI">
   </div>
    <h2>Testers</h2>
-  <p><b>Thank you testers, Gustav B(win10), Elias E(win10)</b></p>
+  <p><b>Thank you testers, Gustav B(win10), Elias E(win10), Edwin Ö(win10), Philippe D(win 10)</b></p>
  </body>
 
 </html>
